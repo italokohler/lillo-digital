@@ -1,0 +1,963 @@
+{
+  "storeName": "ACOUGUE LILLO",
+  "subtitle": "Painel digital de carnes e ofertas",
+  "logoText": "L",
+  "theme": "dark",
+  "slideIntervalSeconds": 12,
+  "tickerIntervalSeconds": 6,
+  "qrPayload": "https://lillo.local/promocoes",
+  "remoteCatalogUrl": "http://10.0.2.2:8787/api/catalog",
+  "ambientMusicEnabled": false,
+  "pages": [
+    {
+      "id": "bovinos_1",
+      "type": "products",
+      "name": "Bovinos",
+      "accentColor": "#D64040",
+      "banner": "CORTES BOVINOS",
+      "description": "Tabela virtual com cortes nobres e de alta saida.",
+      "products": [
+        {
+          "name": "Vazio ",
+          "price": 91.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela Ripa",
+          "price": 42.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela C/ Vazio",
+          "price": 47.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela Minga",
+          "price": 32.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Chuleta",
+          "price": 46.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Contra Filé",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Alcatra C/ Osso",
+          "price": 56.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Alcatra S/ Osso",
+          "price": 65.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Maminha C/ Osso",
+          "price": 57.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Maminha S/ Osso",
+          "price": 66.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Picanha",
+          "price": 89.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filé Mignon",
+          "price": 79.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ],
+      "videoUrl": "",
+      "titleSource": "manual"
+    },
+    {
+      "id": "bovinos_2",
+      "type": "products",
+      "name": "Bovinos 2",
+      "accentColor": "#D64040",
+      "banner": "CORTES BOVINOS",
+      "description": "Tabela virtual com cortes nobres e de alta saida.",
+      "products": [
+        {
+          "name": "Coxão Mole S/Capa",
+          "price": 59.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxão Mole C/Capa",
+          "price": 52.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Patinho C/ Osso",
+          "price": 36.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bife Patinho",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bife Coxão Fora",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Tatu",
+          "price": 47.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Osso Buco",
+          "price": 22.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Ponta Peito",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Agulha",
+          "price": 28.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta",
+          "price": 33.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Entrecôte",
+          "price": 72.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ],
+      "videoUrl": "",
+      "titleSource": "manual"
+    },
+    {
+      "id": "suinos",
+      "type": "products",
+      "name": "Suinos",
+      "accentColor": "#E06E5A",
+      "banner": "CORTES SUINOS",
+      "description": "Tabela de cortes suinos para balcao e churrasqueira.",
+      "products": [
+        {
+          "name": "Costela C/ Pele",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela S/ Pele",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Pernil S/ Pele",
+          "price": 21.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Pernil C/ Pele",
+          "price": 21.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta C/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta S/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Carré C/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Carré S/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bisteca",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Panceta",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobre Paleta",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Lombo",
+          "price": 29.99,
+          "unit": "kg",
+          "isPromo": true,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filézinho",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Ossinho",
+          "price": 7.89,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ],
+      "videoUrl": "",
+      "titleSource": "manual"
+    },
+    {
+      "id": "aves",
+      "type": "products",
+      "name": "Aves",
+      "accentColor": "#7FB3D5",
+      "banner": "CORTES DE AVES",
+      "description": "Cortes de aves para o dia a dia e para o churrasco.",
+      "products": [
+        {
+          "name": "Coxa Sob. Congelada",
+          "price": 18.99,
+          "unit": "kg",
+          "isPromo": true,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxa Sob. Temperada",
+          "price": 18.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxinha da Asa",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Tulipa",
+          "price": 33.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coração",
+          "price": 46.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobrecoxa",
+          "price": 16.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobrecoxa Desossada",
+          "price": 26.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Peito c/ Osso",
+          "price": 19.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filé Peito",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Frango",
+          "price": 15.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Galinha",
+          "price": 15.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ],
+      "videoUrl": "",
+      "titleSource": "manual"
+    }
+  ],
+  "categories": [
+    {
+      "id": "bovinos_1",
+      "name": "Bovinos",
+      "accentColor": "#D64040",
+      "banner": "CORTES BOVINOS",
+      "description": "Tabela virtual com cortes nobres e de alta saida.",
+      "products": [
+        {
+          "name": "Vazio ",
+          "price": 91.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela Ripa",
+          "price": 42.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela C/ Vazio",
+          "price": 47.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela Minga",
+          "price": 32.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Chuleta",
+          "price": 46.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Contra Filé",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Alcatra C/ Osso",
+          "price": 56.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Alcatra S/ Osso",
+          "price": 65.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Maminha C/ Osso",
+          "price": 57.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Maminha S/ Osso",
+          "price": 66.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Picanha",
+          "price": 89.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filé Mignon",
+          "price": 79.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "bovinos_2",
+      "name": "Bovinos 2",
+      "accentColor": "#D64040",
+      "banner": "CORTES BOVINOS",
+      "description": "Tabela virtual com cortes nobres e de alta saida.",
+      "products": [
+        {
+          "name": "Coxão Mole S/Capa",
+          "price": 59.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxão Mole C/Capa",
+          "price": 52.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Patinho C/ Osso",
+          "price": 36.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bife Patinho",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bife Coxão Fora",
+          "price": 49.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Tatu",
+          "price": 47.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Osso Buco",
+          "price": 22.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Ponta Peito",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Agulha",
+          "price": 28.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta",
+          "price": 33.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Entrecôte",
+          "price": 72.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "suinos",
+      "name": "Suinos",
+      "accentColor": "#E06E5A",
+      "banner": "CORTES SUINOS",
+      "description": "Tabela de cortes suinos para balcao e churrasqueira.",
+      "products": [
+        {
+          "name": "Costela C/ Pele",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Costela S/ Pele",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Pernil S/ Pele",
+          "price": 21.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Pernil C/ Pele",
+          "price": 21.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta C/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Paleta S/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Carré C/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Carré S/ Pele",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Bisteca",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Panceta",
+          "price": 31.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobre Paleta",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Lombo",
+          "price": 29.99,
+          "unit": "kg",
+          "isPromo": true,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filézinho",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Ossinho",
+          "price": 7.89,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ]
+    },
+    {
+      "id": "aves",
+      "name": "Aves",
+      "accentColor": "#7FB3D5",
+      "banner": "CORTES DE AVES",
+      "description": "Cortes de aves para o dia a dia e para o churrasco.",
+      "products": [
+        {
+          "name": "Coxa Sob. Congelada",
+          "price": 18.99,
+          "unit": "kg",
+          "isPromo": true,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxa Sob. Temperada",
+          "price": 18.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coxinha da Asa",
+          "price": 24.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Tulipa",
+          "price": 33.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Coração",
+          "price": 46.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobrecoxa",
+          "price": 16.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Sobrecoxa Desossada",
+          "price": 26.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Peito c/ Osso",
+          "price": 19.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Filé Peito",
+          "price": 27.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Frango",
+          "price": 15.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        },
+        {
+          "name": "Galinha",
+          "price": 15.99,
+          "unit": "kg",
+          "isPromo": false,
+          "promoLabel": null,
+          "imageLabel": null,
+          "note": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#130908">
+  <title>Lillo Digital</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="landing-page">
+  <main class="landing-shell">
+    <section class="landing-hero">
+      <img class="landing-logo" src="/logo.png" alt="Casa de Carnes Lillo">
+
+      <div class="landing-copy">
+        <p class="eyebrow">Painel e TV na nuvem</p>
+        <h1>Lillo Digital</h1>
+        <p class="subtitle">
+          Um site só para editar no celular e exibir na TV, sem abrir portas e sem depender de servidor local.
+        </p>
+      </div>
+    </section>
+
+    <section class="launch-grid">
+      <a class="launch-card launch-card-admin" href="/admin">
+        <span class="launch-chip">Admin</span>
+        <strong>Editar catálogo</strong>
+        <p>Crie páginas fixas, vídeos do YouTube e reorganize a sequência do painel.</p>
+      </a>
+
+      <a class="launch-card launch-card-tv" href="/tv">
+        <span class="launch-chip">TV</span>
+        <strong>Exibir na tela</strong>
+        <p>Abra no navegador da TV e deixe os slides rodando com atualização automática.</p>
+      </a>
+    </section>
+
+    <section class="landing-note">
+      <div>
+        <strong>API</strong>
+        <span>/api/catalog e /api/youtube-info via Netlify Functions</span>
+      </div>
+      <div>
+        <strong>Armazenamento</strong>
+        <span>Netlify Blobs para salvar o catálogo entre deploys</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -276,12 +276,45 @@ body {
 }
 
 .product-row.is-promo {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(90deg, rgba(214, 64, 64, 0.46), rgba(214, 64, 64, 0.18));
-  border-color: var(--slide-accent, rgba(255, 205, 92, 0.72));
+  border-color: rgba(255, 205, 92, 0.72);
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.04),
     0 0 0 1px rgba(255, 205, 92, 0.08),
     0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.product-row.is-promo::before,
+.product-row.is-promo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.product-row.is-promo::before {
+  background:
+    linear-gradient(90deg, rgba(255, 236, 170, 0.18), rgba(214, 64, 64, 0.5));
+  opacity: 0.1;
+  animation: promoRowPulse 1.7s ease-in-out infinite;
+}
+
+.product-row.is-promo::after {
+  inset: 1px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 0 16px rgba(255, 255, 255, 0.06),
+    0 0 22px rgba(214, 64, 64, 0.18);
+  opacity: 0.55;
+  animation: promoRowGlow 1.7s ease-in-out infinite;
+}
+
+.product-row.is-promo > * {
+  position: relative;
+  z-index: 1;
 }
 
 .product-copy {
@@ -330,6 +363,7 @@ body {
   box-shadow:
     0 12px 20px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: promoChipPulse 1.7s ease-in-out infinite;
 }
 
 .promo-chip--lead {
@@ -408,6 +442,45 @@ body {
   }
 }
 
+@keyframes promoRowPulse {
+  0%, 100% {
+    opacity: 0.06;
+  }
+
+  50% {
+    opacity: 0.22;
+  }
+}
+
+@keyframes promoRowGlow {
+  0%, 100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes promoChipPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+    box-shadow:
+      0 12px 20px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  50% {
+    transform: translateY(-1px) scale(1.06);
+    filter: brightness(1.08) saturate(1.05);
+    box-shadow:
+      0 14px 24px rgba(0, 0, 0, 0.16),
+      0 0 18px rgba(255, 205, 92, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+}
+
 .product-column .product-row:nth-child(1) { animation-delay: 40ms; }
 .product-column .product-row:nth-child(2) { animation-delay: 90ms; }
 .product-column .product-row:nth-child(3) { animation-delay: 140ms; }
@@ -429,6 +502,12 @@ body {
     animation: none;
     transition: none;
     will-change: auto;
+  }
+
+  .promo-chip,
+  .product-row.is-promo::before,
+  .product-row.is-promo::after {
+    animation: none;
   }
 }
 

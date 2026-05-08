@@ -344,6 +344,14 @@ button:disabled {
   overflow: hidden;
 }
 
+.page-card.is-collapsed .page-body {
+  display: none;
+}
+
+.page-card.is-collapsed .page-header {
+  border-bottom: 0;
+}
+
 .page-card[data-type="video"] {
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24), 0 0 0 1px rgba(127, 179, 213, 0.08);
 }

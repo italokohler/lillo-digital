@@ -14,6 +14,7 @@ const productRowTemplate = document.getElementById('product-row-template');
 
 const ADMIN_PASSWORD = 'lillo2610';
 const ADMIN_UNLOCK_KEY = 'lillo-admin-unlocked-v1';
+const ADMIN_COLLAPSED_PAGES_KEY = 'lillo-admin-collapsed-pages-v1';
 
 let catalog = null;
 let saveTimer = null;
@@ -22,6 +23,7 @@ let saveQueued = false;
 const videoMetadataTimers = new Map();
 const videoMetadataRequests = new Map();
 const videoMetadataCache = new Map();
+let collapsedPageIds = new Set(loadCollapsedPageIds());
 let adminOpened = false;
 
 function createId(prefix = 'page') {
@@ -37,6 +39,28 @@ function getStoredUnlockState() {
     return window.sessionStorage.getItem(ADMIN_UNLOCK_KEY) === '1';
   } catch (error) {
     return false;
+  }
+}
+
+function loadCollapsedPageIds() {
+  try {
+    const raw = window.localStorage.getItem(ADMIN_COLLAPSED_PAGES_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter((pageId) => typeof pageId === 'string' && pageId.trim().length > 0);
+  } catch (error) {
+    return [];
+  }
+}
+
+function persistCollapsedPageIds() {
+  try {
+    window.localStorage.setItem(ADMIN_COLLAPSED_PAGES_KEY, JSON.stringify([...collapsedPageIds]));
+  } catch (error) {
+    // Ignore persistence issues and keep the UI working.
   }
 }
 
@@ -71,6 +95,66 @@ function showLockError(message) {
   }
 
   lockError.textContent = message;
+}
+
+function isPageCollapsed(pageId) {
+  return collapsedPageIds.has(pageId);
+}
+
+function updatePageCollapseState(card, collapsed) {
+  if (!card) {
+    return;
+  }
+
+  card.classList.toggle('is-collapsed', collapsed);
+  card.dataset.collapsed = String(Boolean(collapsed));
+
+  const toggleBtn = card.querySelector('.toggle-collapse-btn');
+  if (toggleBtn) {
+    toggleBtn.textContent = collapsed ? 'Expandir' : 'Minimizar';
+    toggleBtn.setAttribute('aria-label', collapsed ? 'Expandir página' : 'Minimizar página');
+    toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+  }
+}
+
+function setPageCollapsed(pageId, collapsed) {
+  if (!pageId) {
+    return;
+  }
+
+  const nextCollapsed = Boolean(collapsed);
+  if (nextCollapsed) {
+    collapsedPageIds.add(pageId);
+  } else {
+    collapsedPageIds.delete(pageId);
+  }
+
+  persistCollapsedPageIds();
+  updatePageCollapseState(getPageCardById(pageId), nextCollapsed);
+}
+
+function togglePageCollapsed(pageId) {
+  setPageCollapsed(pageId, !isPageCollapsed(pageId));
+}
+
+function syncCollapsedPageIds() {
+  if (!catalog || !Array.isArray(catalog.pages)) {
+    return;
+  }
+
+  const validIds = new Set(catalog.pages.map((page) => page.id));
+  let changed = false;
+
+  for (const pageId of [...collapsedPageIds]) {
+    if (!validIds.has(pageId)) {
+      collapsedPageIds.delete(pageId);
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    persistCollapsedPageIds();
+  }
 }
 
 async function openAdminPanel({ persist = true } = {}) {
@@ -511,6 +595,7 @@ function buildSavePayload() {
 
 function renderCatalog() {
   root.innerHTML = '';
+  syncCollapsedPageIds();
 
   if (!catalog.pages.length) {
     const emptyState = document.createElement('section');
@@ -591,17 +676,21 @@ function renderCatalog() {
     const moveUpBtn = card.querySelector('.move-up-btn');
     const moveDownBtn = card.querySelector('.move-down-btn');
     const removePageBtn = card.querySelector('.remove-page-btn');
+    const toggleCollapseBtn = card.querySelector('.toggle-collapse-btn');
     moveUpBtn.disabled = pageIndex === 0;
     moveDownBtn.disabled = pageIndex === catalog.pages.length - 1;
 
     moveUpBtn.addEventListener('click', () => movePage(pageIndex, -1));
     moveDownBtn.addEventListener('click', () => movePage(pageIndex, 1));
+    toggleCollapseBtn.addEventListener('click', () => togglePageCollapsed(pageData.id));
     removePageBtn.addEventListener('click', () => removePage(pageIndex));
 
     const productsSection = card.querySelector('.products-section');
     const videoSection = card.querySelector('.video-section');
     productsSection.hidden = isVideo;
     videoSection.hidden = !isVideo;
+
+    updatePageCollapseState(card, isPageCollapsed(pageData.id));
 
     const addProductBtn = card.querySelector('.add-product-btn');
     const rows = card.querySelector('.rows');
@@ -702,6 +791,11 @@ function removePage(index) {
 
   if (!window.confirm(`Remover ${label}?`)) {
     return;
+  }
+
+  if (page?.id) {
+    collapsedPageIds.delete(page.id);
+    persistCollapsedPageIds();
   }
 
   catalog.pages.splice(index, 1);

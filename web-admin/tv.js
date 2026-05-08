@@ -64,20 +64,6 @@ function createBoardElement(markup) {
   return board;
 }
 
-function prefersReducedMotion() {
-  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function resetBoardInlineStyles(board) {
-  if (!board) {
-    return;
-  }
-
-  board.style.opacity = "";
-  board.style.transform = "";
-  board.style.filter = "";
-}
-
 function normalizeProduct(product = {}) {
   return {
     name: toText(product.name, "Novo item"),
@@ -486,23 +472,26 @@ function loadYouTubeApi() {
 
 function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
   const previousBoard = getActiveBoard();
-  const canAnimate = typeof nextBoard.animate === "function" && !prefersReducedMotion();
+  const hasPreviousBoard = Boolean(previousBoard && previousBoard !== nextBoard);
 
-  nextBoard.style.opacity = "0";
-  nextBoard.style.transform = "translateX(10px)";
-  nextBoard.style.filter = "none";
+  if (hasPreviousBoard) {
+    nextBoard.classList.add("is-entering");
+  }
+
   root.appendChild(nextBoard);
   nextBoard.setAttribute("aria-hidden", "false");
   state.currentBoard = nextBoard;
   state.currentPlayer = null;
 
-  if (!canAnimate) {
-    nextBoard.classList.add("is-entering");
-    if (previousBoard && previousBoard !== nextBoard) {
-      previousBoard.setAttribute("aria-hidden", "true");
-      previousBoard.classList.add("is-leaving");
-    }
+  if (!hasPreviousBoard) {
+    nextBoard.classList.add("is-active");
+    destroyPlayer(leavingPlayer);
+    return;
+  }
 
+  if (previousBoard && previousBoard !== nextBoard) {
+    previousBoard.setAttribute("aria-hidden", "true");
+    previousBoard.classList.add("is-leaving");
     window.requestAnimationFrame(() => {
       if (nextBoard.isConnected) {
         nextBoard.classList.add("is-active");
@@ -514,55 +503,8 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
         previousBoard.remove();
       }
       destroyPlayer(leavingPlayer);
-      resetBoardInlineStyles(nextBoard);
     }, BOARD_SWAP_MS);
-    return;
   }
-
-  const enterAnimation = nextBoard.animate([
-    { opacity: 0, transform: "translateX(10px)" },
-    { opacity: 1, transform: "translateX(0)" },
-  ], {
-    duration: 560,
-    easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-    fill: "forwards",
-  });
-
-  enterAnimation.finished.then(() => {
-    resetBoardInlineStyles(nextBoard);
-  }, () => {
-    resetBoardInlineStyles(nextBoard);
-  });
-
-  if (previousBoard && previousBoard !== nextBoard) {
-    previousBoard.setAttribute("aria-hidden", "true");
-    const exitAnimation = typeof previousBoard.animate === "function"
-      ? previousBoard.animate([
-        { opacity: 1, transform: "translateX(0)" },
-        { opacity: 0, transform: "translateX(-8px)" },
-      ], {
-        duration: 340,
-        easing: "ease-out",
-        fill: "forwards",
-      })
-      : null;
-
-    const cleanupPrevious = () => {
-      if (previousBoard.isConnected) {
-        previousBoard.remove();
-      }
-      destroyPlayer(leavingPlayer);
-    };
-
-    if (exitAnimation) {
-      exitAnimation.finished.then(cleanupPrevious, cleanupPrevious);
-    } else {
-      window.setTimeout(cleanupPrevious, BOARD_SWAP_MS);
-    }
-    return;
-  }
-
-  destroyPlayer(leavingPlayer);
 }
 
 async function mountVideoPlayer(slide, renderToken, board, playerId) {

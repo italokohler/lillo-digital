@@ -111,6 +111,8 @@ body {
   width: 112px;
   height: 112px;
   object-fit: contain;
+  transform: scale(1.12);
+  transform-origin: center;
 }
 
 .board-copy {

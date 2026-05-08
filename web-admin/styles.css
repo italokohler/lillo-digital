@@ -35,6 +35,123 @@ body {
   padding: 24px;
 }
 
+body.admin-locked {
+  overflow: hidden;
+}
+
+.admin-app {
+  min-height: 100vh;
+}
+
+body.admin-locked .admin-app[hidden],
+body.admin-locked .admin-app {
+  display: none;
+}
+
+body.admin-unlocked .lock-screen {
+  display: none;
+}
+
+.lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(214, 64, 64, 0.18), transparent 32%),
+    linear-gradient(180deg, rgba(19, 9, 8, 0.96), rgba(20, 9, 7, 0.98));
+}
+
+.lock-card {
+  width: min(460px, 100%);
+  padding: 26px 24px 22px;
+  border-radius: 28px;
+  border: 1px solid rgba(248, 244, 235, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(214, 64, 64, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(26, 16, 12, 0.96), rgba(19, 9, 8, 0.95));
+  color: #f8f4eb;
+  box-shadow: 0 28px 56px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(12px);
+}
+
+.lock-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(214, 64, 64, 0.18);
+  color: #ffd7d1;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lock-card h1 {
+  margin: 14px 0 8px;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 0.98;
+}
+
+.lock-copy {
+  margin: 0 0 20px;
+  color: rgba(248, 244, 235, 0.74);
+  line-height: 1.55;
+}
+
+.lock-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lock-field span {
+  color: rgba(248, 244, 235, 0.72);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lock-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(248, 244, 235, 0.14);
+  background: rgba(248, 244, 235, 0.08);
+  color: #f8f4eb;
+  outline: none;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.lock-field input::placeholder {
+  color: rgba(248, 244, 235, 0.36);
+}
+
+.lock-field input:focus {
+  border-color: rgba(214, 64, 64, 0.55);
+  box-shadow: 0 0 0 4px rgba(214, 64, 64, 0.12);
+}
+
+.lock-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px 18px;
+  border-radius: 16px;
+}
+
+.lock-error {
+  min-height: 22px;
+  margin: 12px 0 0;
+  color: #ffb8b0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -590,6 +707,7 @@ button:disabled {
   }
 
   .status-card {
+    min-width: 0;
     text-align: left;
   }
 
@@ -599,6 +717,15 @@ button:disabled {
 }
 
 @media (max-width: 560px) {
+  .lock-screen {
+    padding: 16px;
+  }
+
+  .lock-card {
+    padding: 22px 18px 18px;
+    border-radius: 22px;
+  }
+
   .catalog-grid {
     grid-template-columns: 1fr;
   }

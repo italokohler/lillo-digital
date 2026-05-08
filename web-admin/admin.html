@@ -6,42 +6,60 @@
   <title>Painel Lillo</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
-  <header class="topbar">
-    <div class="hero-copy">
-      <p class="eyebrow">Painel de páginas em tempo real</p>
-      <h1>Lillo Admin</h1>
-      <p class="subtitle">Crie páginas fixas, edite os cortes e adicione vídeos do YouTube para a TV seguir a sequência sozinha.</p>
-    </div>
+<body class="admin-locked">
+  <div id="lock-screen" class="lock-screen" role="dialog" aria-modal="true" aria-labelledby="lock-title">
+    <form id="lock-form" class="lock-card" autocomplete="off">
+      <div class="lock-badge">Painel protegido</div>
+      <h1 id="lock-title">Lillo Admin</h1>
+      <p class="lock-copy">Digite a senha para abrir o painel de edição do catálogo.</p>
 
-    <div class="status-card">
-      <span id="status" class="status">Carregando...</span>
-      <span id="updated" class="updated">--</span>
-      <div class="actions">
-        <button id="add-page-btn" type="button">+ Página fixa</button>
-        <button id="add-video-btn" type="button" class="button-secondary">+ Vídeo YouTube</button>
-        <a class="button-ghost button-link" href="/tv">Abrir TV</a>
-        <button id="reload-btn" type="button" class="button-ghost">Recarregar</button>
+      <label class="lock-field">
+        <span>Senha</span>
+        <input id="lock-password" type="password" autocomplete="current-password" inputmode="text" placeholder="Digite a senha" autofocus>
+      </label>
+
+      <button type="submit" class="lock-submit">Abrir painel</button>
+      <p id="lock-error" class="lock-error" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="admin-app">
+    <header class="topbar">
+      <div class="hero-copy">
+        <p class="eyebrow">Painel de páginas em tempo real</p>
+        <h1>Lillo Admin</h1>
+        <p class="subtitle">Crie páginas fixas, edite os cortes e adicione vídeos do YouTube para a TV seguir a sequência sozinha.</p>
       </div>
-    </div>
-  </header>
 
-  <section class="info-strip">
-    <div>
-      <strong>API pública</strong>
-      <span>/api/catalog</span>
-    </div>
-    <div>
-      <strong>TV no navegador</strong>
-      <span>/tv atualiza a cada 3 segundos</span>
-    </div>
-    <div>
-      <strong>Persistência</strong>
-      <span>Netlify Blobs segura o catálogo entre deploys</span>
-    </div>
-  </section>
+      <div class="status-card">
+        <span id="status" class="status">Carregando...</span>
+        <span id="updated" class="updated">--</span>
+        <div class="actions">
+          <button id="add-page-btn" type="button">+ Página fixa</button>
+          <button id="add-video-btn" type="button" class="button-secondary">+ Vídeo YouTube</button>
+          <a class="button-ghost button-link" href="/tv">Abrir TV</a>
+          <button id="reload-btn" type="button" class="button-ghost">Recarregar</button>
+        </div>
+      </div>
+    </header>
 
-  <main id="catalog-root" class="catalog-grid"></main>
+    <section class="info-strip">
+      <div>
+        <strong>API pública</strong>
+        <span>/api/catalog</span>
+      </div>
+      <div>
+        <strong>TV no navegador</strong>
+        <span>/tv atualiza a cada 3 segundos</span>
+      </div>
+      <div>
+        <strong>Persistência</strong>
+        <span>Netlify Blobs segura o catálogo entre deploys</span>
+      </div>
+    </section>
+
+    <main id="catalog-root" class="catalog-grid"></main>
+  </div>
 
   <template id="page-template">
     <section class="page-card">

@@ -4,8 +4,16 @@ const updatedEl = document.getElementById('updated');
 const reloadBtn = document.getElementById('reload-btn');
 const addPageBtn = document.getElementById('add-page-btn');
 const addVideoBtn = document.getElementById('add-video-btn');
+const adminApp = document.querySelector('.admin-app');
+const lockScreen = document.getElementById('lock-screen');
+const lockForm = document.getElementById('lock-form');
+const lockPassword = document.getElementById('lock-password');
+const lockError = document.getElementById('lock-error');
 const pageTemplate = document.getElementById('page-template');
 const productRowTemplate = document.getElementById('product-row-template');
+
+const ADMIN_PASSWORD = 'lillo2610';
+const ADMIN_UNLOCK_KEY = 'lillo-admin-unlocked-v1';
 
 let catalog = null;
 let saveTimer = null;
@@ -14,6 +22,7 @@ let saveQueued = false;
 const videoMetadataTimers = new Map();
 const videoMetadataRequests = new Map();
 const videoMetadataCache = new Map();
+let adminOpened = false;
 
 function createId(prefix = 'page') {
   if (window.crypto && typeof window.crypto.randomUUID === 'function') {
@@ -21,6 +30,98 @@ function createId(prefix = 'page') {
   }
 
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getStoredUnlockState() {
+  try {
+    return window.sessionStorage.getItem(ADMIN_UNLOCK_KEY) === '1';
+  } catch (error) {
+    return false;
+  }
+}
+
+function setStoredUnlockState(unlocked) {
+  try {
+    if (unlocked) {
+      window.sessionStorage.setItem(ADMIN_UNLOCK_KEY, '1');
+    } else {
+      window.sessionStorage.removeItem(ADMIN_UNLOCK_KEY);
+    }
+  } catch (error) {
+    // Ignore storage failures and keep the current session functional.
+  }
+}
+
+function setAdminVisibility(unlocked) {
+  document.body.classList.toggle('admin-locked', !unlocked);
+  document.body.classList.toggle('admin-unlocked', unlocked);
+
+  if (adminApp) {
+    adminApp.hidden = !unlocked;
+  }
+
+  if (lockScreen) {
+    lockScreen.hidden = unlocked;
+  }
+}
+
+function showLockError(message) {
+  if (!lockError) {
+    return;
+  }
+
+  lockError.textContent = message;
+}
+
+async function openAdminPanel({ persist = true } = {}) {
+  if (adminOpened) {
+    setAdminVisibility(true);
+    return;
+  }
+
+  adminOpened = true;
+  if (persist) {
+    setStoredUnlockState(true);
+  }
+
+  setAdminVisibility(true);
+  showLockError('');
+  if (lockPassword) {
+    lockPassword.value = '';
+  }
+
+  await loadCatalog();
+}
+
+function closeAdminPanel() {
+  adminOpened = false;
+  setStoredUnlockState(false);
+  setAdminVisibility(false);
+  showLockError('');
+
+  if (lockPassword) {
+    lockPassword.value = '';
+    lockPassword.focus();
+  }
+}
+
+function bootAdmin() {
+  if (getStoredUnlockState()) {
+    openAdminPanel({ persist: true }).catch((error) => {
+      console.error(error);
+      adminOpened = false;
+      closeAdminPanel();
+      showLockError('Nao foi possivel abrir o painel. Tente novamente.');
+    });
+    return;
+  }
+
+  setAdminVisibility(false);
+  if (lockPassword) {
+    window.setTimeout(() => {
+      lockPassword.focus();
+    }, 0);
+  }
 }
 
 function toNumber(value, fallback = 0) {
@@ -667,6 +768,37 @@ async function saveCatalog() {
 addPageBtn.addEventListener('click', () => addPage('products'));
 addVideoBtn.addEventListener('click', () => addPage('video'));
 
+if (lockForm) {
+  lockForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const enteredPassword = String(lockPassword?.value || '').trim();
+    if (enteredPassword !== ADMIN_PASSWORD) {
+      showLockError('Senha incorreta. Tente novamente.');
+      if (lockPassword) {
+        lockPassword.focus();
+        lockPassword.select();
+      }
+      return;
+    }
+
+    try {
+      await openAdminPanel({ persist: true });
+    } catch (error) {
+      console.error(error);
+      adminOpened = false;
+      closeAdminPanel();
+      showLockError('Nao foi possivel abrir o painel. Tente novamente.');
+    }
+  });
+}
+
+if (lockPassword) {
+  lockPassword.addEventListener('input', () => {
+    showLockError('');
+  });
+}
+
 reloadBtn.addEventListener('click', async () => {
   try {
     await loadCatalog();
@@ -676,8 +808,4 @@ reloadBtn.addEventListener('click', async () => {
   }
 });
 
-loadCatalog().catch((error) => {
-  console.error(error);
-  setStatus('Falha ao conectar', 'error');
-  setUpdated('Verifique o servidor Node.');
-});
+bootAdmin();

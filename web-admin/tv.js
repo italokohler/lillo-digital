@@ -281,10 +281,7 @@ function createProductRow(product) {
     <article class="product-row ${product.isPromo ? "is-promo" : ""}">
       <div class="product-copy">
         <h2 class="product-name">${escapeHtml(product.name.toUpperCase())}</h2>
-        <div class="product-meta">
-          <span class="product-unit">${escapeHtml(product.unit.toUpperCase())}</span>
-          ${product.isPromo ? '<span class="promo-chip">OFERTA</span>' : ""}
-        </div>
+        ${product.isPromo ? '<div class="product-meta"><span class="promo-chip">OFERTA</span></div>' : ""}
       </div>
       <div class="price-ticket">
         <span class="price-currency">R$</span>

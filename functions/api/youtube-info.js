@@ -1,8 +1,8 @@
-import { jsonResponse } from "./_shared/catalog.mjs";
-import { fetchYouTubeInfo } from "./_shared/youtube.mjs";
+import { jsonResponse } from "../_shared/catalog.js";
+import { fetchYouTubeInfo } from "../_shared/youtube.js";
 
-export default async function handler(req) {
-  if (req.method !== "GET") {
+export async function onRequest(context) {
+  if (context.request.method !== "GET") {
     return new Response("Method not allowed", {
       status: 405,
       headers: {
@@ -11,7 +11,7 @@ export default async function handler(req) {
     });
   }
 
-  const requestUrl = new URL(req.url);
+  const requestUrl = new URL(context.request.url);
   const rawUrl = requestUrl.searchParams.get("url") || "";
 
   try {

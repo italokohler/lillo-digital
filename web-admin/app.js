@@ -536,6 +536,49 @@ function extractYouTubeVideoId(input) {
   return null;
 }
 
+function describeCatalogSource(storageSource, requestSource) {
+  const source = String(storageSource || '').toLowerCase();
+  const request = String(requestSource || '');
+
+  if (request === '/api/catalog' && source === 'd1') {
+    return {
+      status: 'Pronto na nuvem',
+      tone: 'success',
+      updated: `Catálogo carregado do Cloudflare D1 às ${new Date().toLocaleTimeString('pt-BR')}`,
+    };
+  }
+
+  if (request === '/api/catalog' && source === 'seed') {
+    return {
+      status: 'Seed ativo',
+      tone: 'warning',
+      updated: 'A API respondeu com o catálogo seed. Conecte o D1 para salvar na nuvem.',
+    };
+  }
+
+  if (request === '/api/catalog' && source === 'memory') {
+    return {
+      status: 'Memória temporária',
+      tone: 'warning',
+      updated: 'A API está sem D1. As alterações podem não persistir entre deploys.',
+    };
+  }
+
+  if (request === '/data/catalog.seed.json') {
+    return {
+      status: 'Modo local',
+      tone: 'warning',
+      updated: 'Catálogo seed local carregado. Abra a API para salvar na nuvem.',
+    };
+  }
+
+  return {
+    status: 'Pronto',
+    tone: 'success',
+    updated: `Atualizado agora: ${new Date().toLocaleTimeString('pt-BR')}`,
+  };
+}
+
 async function fetchCatalogData() {
   const sources = ['/api/catalog', '/data/catalog.seed.json'];
   let lastError = null;
@@ -548,9 +591,11 @@ async function fetchCatalogData() {
         continue;
       }
 
+      const storageSource = response.headers.get('x-catalog-source') || '';
       return {
         raw: await response.json(),
         source,
+        storageSource,
       };
     } catch (error) {
       lastError = error;
@@ -563,9 +608,13 @@ async function fetchCatalogData() {
 async function loadCatalog() {
   setStatus('Carregando...', 'neutral');
 
-  const { raw, source } = await fetchCatalogData();
+  const { raw, source, storageSource } = await fetchCatalogData();
   catalog = normalizeCatalog(raw);
   renderCatalog();
+  const nextState = describeCatalogSource(storageSource, source);
+  setStatus(nextState.status, nextState.tone);
+  setUpdated(nextState.updated);
+  return;
   if (source === '/api/catalog') {
     setStatus('Pronto', 'success');
     setUpdated(`Atualizado agora: ${new Date().toLocaleTimeString('pt-BR')}`);
@@ -845,6 +894,11 @@ async function saveCatalog() {
     }
 
     const result = await response.json();
+    const storageSource = response.headers.get('x-catalog-source') || 'd1';
+    const saveState = describeCatalogSource(storageSource, '/api/catalog');
+    setStatus(storageSource === 'd1' ? 'Salvo na nuvem' : saveState.status, storageSource === 'd1' ? 'success' : saveState.tone);
+    setUpdated(`Último envio: ${new Date(result.updatedAt).toLocaleTimeString('pt-BR')}`);
+    return;
     setStatus('Salvo', 'success');
     setUpdated(`Último envio: ${new Date(result.updatedAt).toLocaleTimeString('pt-BR')}`);
   } catch (error) {

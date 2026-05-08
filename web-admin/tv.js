@@ -154,9 +154,11 @@ async function fetchCatalogData() {
         continue;
       }
 
+      const storageSource = response.headers.get("x-catalog-source") || "";
       return {
         raw: await response.json(),
         source,
+        storageSource,
       };
     } catch (error) {
       lastError = error;
@@ -652,14 +654,14 @@ function renderSlide() {
 }
 
 async function loadCatalog() {
-  const { raw, source } = await fetchCatalogData();
+  const { raw, source, storageSource } = await fetchCatalogData();
   const signature = JSON.stringify(raw);
   if (signature === state.catalogSignature && state.catalog) {
     return false;
   }
 
   state.catalogSignature = signature;
-  state.catalogSource = source;
+  state.catalogSource = storageSource || source;
   state.catalog = normalizeCatalog(raw);
   state.slides = displayPages(state.catalog);
 

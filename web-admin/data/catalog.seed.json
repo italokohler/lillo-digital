@@ -6,7 +6,7 @@
   "slideIntervalSeconds": 12,
   "tickerIntervalSeconds": 6,
   "qrPayload": "https://lillo.local/promocoes",
-  "remoteCatalogUrl": "http://10.0.2.2:8787/api/catalog",
+  "remoteCatalogUrl": "/api/catalog",
   "ambientMusicEnabled": false,
   "pages": [
     {

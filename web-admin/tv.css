@@ -148,7 +148,7 @@ body {
   height: 5px;
   margin-top: 14px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--slide-accent, var(--accent));
 }
 
 .board-subtitle {
@@ -157,7 +157,7 @@ body {
   font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8bc0e0;
+  color: var(--slide-accent, #8bc0e0);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -285,13 +285,14 @@ function createHeader(slide, slideText) {
   const secondaryText = isVideo ? slide.name : slide.banner || state.catalog.subtitle;
   const primaryClass = isVideo ? "board-title is-video-channel" : "board-title";
   const secondaryClass = isVideo ? "board-subtitle is-video-title" : "board-subtitle";
+  const slideAccent = slide.accentColor || "#d64040";
 
   return `
-    <header class="board-header">
+    <header class="board-header" style="--slide-accent:${escapeHtml(slideAccent)}">
       <img class="board-logo" src="/logo.png" alt="Casa de Carnes Lillo">
       <div class="board-copy">
         <h1 class="${primaryClass}">${escapeHtml(primaryText.toUpperCase())}</h1>
-        <div class="board-rule" style="background:${escapeHtml(slide.accentColor || "#d64040")}"></div>
+        <div class="board-rule"></div>
         <p class="${secondaryClass}">${escapeHtml(secondaryText.toUpperCase())}</p>
       </div>
       <div class="board-meta">
@@ -404,11 +405,11 @@ function renderEmptyState(message, leavingPlayer = state.currentPlayer) {
       <div class="board-watermark">
         <img src="/logo.png" alt="" aria-hidden="true">
       </div>
-      <header class="board-header">
+      <header class="board-header" style="--slide-accent:#d64040">
         <img class="board-logo" src="/logo.png" alt="Casa de Carnes Lillo">
         <div class="board-copy">
           <h1 class="board-title">AGUARDANDO CATALOGO</h1>
-          <div class="board-rule" style="background:#d64040"></div>
+          <div class="board-rule"></div>
           <p class="board-subtitle">Painel digital de carnes e ofertas</p>
         </div>
         <div class="board-meta">

@@ -3,6 +3,7 @@ const root = document.getElementById("tv-root");
 const state = {
   catalog: null,
   catalogSignature: "",
+  catalogSource: "api",
   slides: [],
   slideIndex: 0,
   slideTimer: null,
@@ -109,6 +110,30 @@ function normalizeCatalog(raw = {}) {
 
 function displayPages(catalog) {
   return Array.isArray(catalog.pages) ? catalog.pages : [];
+}
+
+async function fetchCatalogData() {
+  const sources = ["/api/catalog", "/data/catalog.seed.json"];
+  let lastError = null;
+
+  for (const source of sources) {
+    try {
+      const response = await fetch(source, { cache: "no-store" });
+      if (!response.ok) {
+        lastError = new Error(`Falha ao carregar catalogo (${response.status})`);
+        continue;
+      }
+
+      return {
+        raw: await response.json(),
+        source,
+      };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Falha ao carregar catalogo.");
 }
 
 function extractYouTubeVideoId(input) {
@@ -536,18 +561,14 @@ function renderSlide() {
 }
 
 async function loadCatalog() {
-  const response = await fetch("/api/catalog", { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Falha ao carregar catalogo (${response.status})`);
-  }
-
-  const raw = await response.json();
+  const { raw, source } = await fetchCatalogData();
   const signature = JSON.stringify(raw);
   if (signature === state.catalogSignature && state.catalog) {
     return false;
   }
 
   state.catalogSignature = signature;
+  state.catalogSource = source;
   state.catalog = normalizeCatalog(raw);
   state.slides = displayPages(state.catalog);
 

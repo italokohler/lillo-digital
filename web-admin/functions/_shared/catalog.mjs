@@ -65,13 +65,17 @@ export async function loadCatalog() {
   const store = getCatalogStore();
 
   if (store) {
-    const catalog = await store.get(CATALOG_KEY, {
-      type: "json",
-      consistency: "strong",
-    });
+    try {
+      const catalog = await store.get(CATALOG_KEY, {
+        type: "json",
+        consistency: "strong",
+      });
 
-    if (catalog) {
-      return catalog;
+      if (catalog) {
+        return catalog;
+      }
+    } catch (error) {
+      // Fall back to the bundled seed when Blobs is unavailable or misconfigured.
     }
   }
 
@@ -86,7 +90,12 @@ export async function saveCatalog(catalog) {
   const store = getCatalogStore();
 
   if (store) {
-    await store.setJSON(CATALOG_KEY, catalog);
+    try {
+      await store.setJSON(CATALOG_KEY, catalog);
+    } catch (error) {
+      memoryCatalog = catalog;
+      return catalog;
+    }
   } else {
     memoryCatalog = catalog;
   }

@@ -12,3 +12,6 @@ captures/
 *.jks
 node_modules/
 web-admin/functions/.netlify/
+.tmp-cli-src/
+gh-*.log
+gh-debug.*

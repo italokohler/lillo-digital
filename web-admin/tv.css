@@ -46,30 +46,32 @@ body {
   width: 100%;
   height: 100%;
   padding: 24px 38px 30px;
-  opacity: 0;
-  transform: translateX(12%) scale(0.98);
-  filter: blur(5px);
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 620ms ease,
+    transform 760ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 620ms ease;
   will-change: opacity, transform, filter;
 }
 
 .board.is-entering {
   opacity: 0;
-  transform: translateX(14%) scale(0.98);
-  filter: blur(5px);
+  transform: translateX(18%) scale(0.975);
+  filter: blur(6px);
 }
 
 .board.is-active {
   opacity: 1;
   transform: translateX(0) scale(1);
   filter: blur(0);
-  animation: boardIn 760ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 .board.is-leaving {
   opacity: 0;
-  transform: translateX(-14%) scale(0.975);
-  filter: blur(4px);
-  animation: boardOut 520ms ease both;
+  transform: translateX(-18%) scale(0.97);
+  filter: blur(5px);
   pointer-events: none;
 }
 
@@ -117,7 +119,7 @@ body {
   width: 112px;
   height: 112px;
   object-fit: contain;
-  transform: scale(1.12);
+  transform: scale(1.3);
   transform-origin: center;
 }
 
@@ -357,38 +359,6 @@ body {
   }
 }
 
-@keyframes boardIn {
-  from {
-    opacity: 0;
-    transform: translateX(14%) scale(0.98);
-    filter: blur(5px);
-  }
-
-  60% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes boardOut {
-  from {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateX(-14%) scale(0.975);
-    filter: blur(4px);
-  }
-}
-
 @keyframes headerEnter {
   from {
     opacity: 0;
@@ -434,23 +404,6 @@ body {
   .product-row,
   .empty-slide,
   .video-stage {
-    animation: none;
-  }
-
-  .board.is-active {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-    filter: blur(0);
-  }
-
-  .board.is-leaving {
-    opacity: 0;
-    transform: translateX(-14%) scale(0.975);
-    filter: blur(4px);
-  }
-
-  .board.is-active,
-  .board.is-leaving {
     animation: none;
   }
 }

@@ -16,7 +16,7 @@ const state = {
 
 const POLL_INTERVAL_MS = 3000;
 const FALLBACK_ADVANCE_MS = 12000;
-const BOARD_SWAP_MS = 720;
+const BOARD_SWAP_MS = 840;
 const YOUTUBE_ORIGIN = window.location.origin;
 
 function toText(value, fallback = "") {
@@ -62,6 +62,20 @@ function createBoardElement(markup) {
   }
 
   return board;
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function resetBoardInlineStyles(board) {
+  if (!board) {
+    return;
+  }
+
+  board.style.opacity = "";
+  board.style.transform = "";
+  board.style.filter = "";
 }
 
 function normalizeProduct(product = {}) {
@@ -470,32 +484,84 @@ function loadYouTubeApi() {
 
 function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
   const previousBoard = getActiveBoard();
+  const canAnimate = typeof nextBoard.animate === "function" && !prefersReducedMotion();
 
-  nextBoard.classList.add("is-entering");
-  nextBoard.setAttribute("aria-hidden", "false");
-  root.appendChild(nextBoard);
-  state.currentBoard = nextBoard;
-  state.currentPlayer = null;
+  if (!canAnimate) {
+    nextBoard.classList.add("is-entering");
+    root.appendChild(nextBoard);
+    nextBoard.setAttribute("aria-hidden", "false");
+    state.currentBoard = nextBoard;
+    state.currentPlayer = null;
 
-  requestAnimationFrame(() => {
-    // Let the browser paint the initial state first, then trigger the transition.
-    requestAnimationFrame(() => {
+    if (previousBoard && previousBoard !== nextBoard) {
+      previousBoard.setAttribute("aria-hidden", "true");
+      previousBoard.classList.add("is-leaving");
+    }
+
+    window.requestAnimationFrame(() => {
       if (nextBoard.isConnected) {
         nextBoard.classList.add("is-active");
       }
     });
+
+    window.setTimeout(() => {
+      if (previousBoard && previousBoard !== nextBoard && previousBoard.isConnected) {
+        previousBoard.remove();
+      }
+      destroyPlayer(leavingPlayer);
+      resetBoardInlineStyles(nextBoard);
+    }, BOARD_SWAP_MS);
+    return;
+  }
+
+  nextBoard.style.opacity = "0";
+  nextBoard.style.transform = "translateX(18%) scale(0.975)";
+  nextBoard.style.filter = "blur(6px)";
+  root.appendChild(nextBoard);
+  nextBoard.setAttribute("aria-hidden", "false");
+  state.currentBoard = nextBoard;
+  state.currentPlayer = null;
+
+  const enterAnimation = nextBoard.animate([
+    { opacity: 0, transform: "translateX(18%) scale(0.975)", filter: "blur(6px)" },
+    { opacity: 1, transform: "translateX(0) scale(1)", filter: "blur(0)" },
+  ], {
+    duration: 940,
+    easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+    fill: "forwards",
+  });
+
+  enterAnimation.finished.then(() => {
+    resetBoardInlineStyles(nextBoard);
+  }, () => {
+    resetBoardInlineStyles(nextBoard);
   });
 
   if (previousBoard && previousBoard !== nextBoard) {
-    previousBoard.classList.add("is-leaving");
     previousBoard.setAttribute("aria-hidden", "true");
+    const exitAnimation = typeof previousBoard.animate === "function"
+      ? previousBoard.animate([
+        { opacity: 1, transform: "translateX(0) scale(1)", filter: "blur(0)" },
+        { opacity: 0, transform: "translateX(-18%) scale(0.97)", filter: "blur(5px)" },
+      ], {
+        duration: 660,
+        easing: "ease",
+        fill: "forwards",
+      })
+      : null;
 
-    window.setTimeout(() => {
+    const cleanupPrevious = () => {
       if (previousBoard.isConnected) {
         previousBoard.remove();
       }
       destroyPlayer(leavingPlayer);
-    }, BOARD_SWAP_MS);
+    };
+
+    if (exitAnimation) {
+      exitAnimation.finished.then(cleanupPrevious, cleanupPrevious);
+    } else {
+      window.setTimeout(cleanupPrevious, BOARD_SWAP_MS);
+    }
     return;
   }
 

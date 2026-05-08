@@ -16,7 +16,7 @@ const state = {
 
 const POLL_INTERVAL_MS = 3000;
 const FALLBACK_ADVANCE_MS = 12000;
-const BOARD_SWAP_MS = 840;
+const BOARD_SWAP_MS = 420;
 const YOUTUBE_ORIGIN = window.location.origin;
 
 function toText(value, fallback = "") {
@@ -488,13 +488,16 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
   const previousBoard = getActiveBoard();
   const canAnimate = typeof nextBoard.animate === "function" && !prefersReducedMotion();
 
+  nextBoard.style.opacity = "0";
+  nextBoard.style.transform = "translateY(8px) scale(0.996)";
+  nextBoard.style.filter = "none";
+  root.appendChild(nextBoard);
+  nextBoard.setAttribute("aria-hidden", "false");
+  state.currentBoard = nextBoard;
+  state.currentPlayer = null;
+
   if (!canAnimate) {
     nextBoard.classList.add("is-entering");
-    root.appendChild(nextBoard);
-    nextBoard.setAttribute("aria-hidden", "false");
-    state.currentBoard = nextBoard;
-    state.currentPlayer = null;
-
     if (previousBoard && previousBoard !== nextBoard) {
       previousBoard.setAttribute("aria-hidden", "true");
       previousBoard.classList.add("is-leaving");
@@ -516,20 +519,12 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
     return;
   }
 
-  nextBoard.style.opacity = "0";
-  nextBoard.style.transform = "translateX(18%) scale(0.975)";
-  nextBoard.style.filter = "blur(6px)";
-  root.appendChild(nextBoard);
-  nextBoard.setAttribute("aria-hidden", "false");
-  state.currentBoard = nextBoard;
-  state.currentPlayer = null;
-
   const enterAnimation = nextBoard.animate([
-    { opacity: 0, transform: "translateX(18%) scale(0.975)", filter: "blur(6px)" },
-    { opacity: 1, transform: "translateX(0) scale(1)", filter: "blur(0)" },
+    { opacity: 0, transform: "translateY(8px) scale(0.996)" },
+    { opacity: 1, transform: "translateY(0) scale(1)" },
   ], {
-    duration: 940,
-    easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+    duration: 420,
+    easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
     fill: "forwards",
   });
 
@@ -543,11 +538,11 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
     previousBoard.setAttribute("aria-hidden", "true");
     const exitAnimation = typeof previousBoard.animate === "function"
       ? previousBoard.animate([
-        { opacity: 1, transform: "translateX(0) scale(1)", filter: "blur(0)" },
-        { opacity: 0, transform: "translateX(-18%) scale(0.97)", filter: "blur(5px)" },
+        { opacity: 1, transform: "translateY(0) scale(1)" },
+        { opacity: 0, transform: "translateY(-6px) scale(0.995)" },
       ], {
-        duration: 660,
-        easing: "ease",
+        duration: 260,
+        easing: "ease-out",
         fill: "forwards",
       })
       : null;

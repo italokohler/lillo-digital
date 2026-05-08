@@ -318,8 +318,10 @@ function createProductRow(product) {
   return `
     <article class="product-row ${product.isPromo ? "is-promo" : ""}">
       <div class="product-copy">
-        ${product.isPromo ? '<span class="promo-chip promo-chip--lead">OFERTA</span>' : ""}
-        <h2 class="product-name">${escapeHtml(product.name.toUpperCase())}</h2>
+        <div class="product-heading ${product.isPromo ? "is-promo" : ""}">
+          ${product.isPromo ? '<span class="promo-chip promo-chip--lead">OFERTA</span>' : ""}
+          <h2 class="product-name">${escapeHtml(product.name.toUpperCase())}</h2>
+        </div>
       </div>
       <div class="price-ticket">
         <span class="price-currency">R$</span>

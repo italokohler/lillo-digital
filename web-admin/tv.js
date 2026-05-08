@@ -16,7 +16,7 @@ const state = {
 
 const POLL_INTERVAL_MS = 3000;
 const FALLBACK_ADVANCE_MS = 12000;
-const BOARD_SWAP_MS = 560;
+const BOARD_SWAP_MS = 620;
 const YOUTUBE_ORIGIN = window.location.origin;
 
 function toText(value, fallback = "") {
@@ -62,6 +62,22 @@ function createBoardElement(markup) {
   }
 
   return board;
+}
+
+function activateBoardSwap(nextBoard, previousBoard) {
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      if (!nextBoard.isConnected) {
+        return;
+      }
+
+      if (previousBoard && previousBoard !== nextBoard && previousBoard.isConnected) {
+        previousBoard.classList.add("is-leaving");
+      }
+
+      nextBoard.classList.add("is-active");
+    });
+  });
 }
 
 function normalizeProduct(product = {}) {
@@ -491,12 +507,7 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
 
   if (previousBoard && previousBoard !== nextBoard) {
     previousBoard.setAttribute("aria-hidden", "true");
-    previousBoard.classList.add("is-leaving");
-    window.requestAnimationFrame(() => {
-      if (nextBoard.isConnected) {
-        nextBoard.classList.add("is-active");
-      }
-    });
+    activateBoardSwap(nextBoard, previousBoard);
 
     window.setTimeout(() => {
       if (previousBoard && previousBoard !== nextBoard && previousBoard.isConnected) {

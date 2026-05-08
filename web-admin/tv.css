@@ -47,19 +47,19 @@ body {
   height: 100%;
   padding: 24px 38px 30px;
   opacity: 0;
-  transform: translateX(5.5%) scale(0.992);
-  filter: blur(4px);
+  transform: translateX(12%) scale(0.98);
+  filter: blur(5px);
   transition:
-    opacity 540ms ease,
-    transform 680ms cubic-bezier(0.22, 0.61, 0.36, 1),
-    filter 540ms ease;
+    opacity 520ms ease,
+    transform 760ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 520ms ease;
   will-change: opacity, transform, filter;
 }
 
 .board.is-entering {
   opacity: 0;
-  transform: translateX(6.5%) scale(0.992);
-  filter: blur(4px);
+  transform: translateX(14%) scale(0.98);
+  filter: blur(5px);
 }
 
 .board.is-active {
@@ -70,8 +70,8 @@ body {
 
 .board.is-leaving {
   opacity: 0;
-  transform: translateX(-5%) scale(0.988);
-  filter: blur(3px);
+  transform: translateX(-12%) scale(0.975);
+  filter: blur(4px);
   pointer-events: none;
 }
 

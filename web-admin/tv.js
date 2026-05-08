@@ -476,7 +476,12 @@ function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
   state.currentPlayer = null;
 
   requestAnimationFrame(() => {
-    nextBoard.classList.add("is-active");
+    // Let the browser paint the initial state first, then trigger the transition.
+    requestAnimationFrame(() => {
+      if (nextBoard.isConnected) {
+        nextBoard.classList.add("is-active");
+      }
+    });
   });
 
   if (previousBoard && previousBoard !== nextBoard) {

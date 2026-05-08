@@ -351,6 +351,7 @@ function createProductsSlide(slide) {
   const products = Array.isArray(slide.products) ? slide.products : [];
   const columns = products.length > 7 && window.innerWidth >= 1200 ? 2 : 1;
   const groups = splitProducts(products, columns);
+  const slideAccent = slide.accentColor || "#d64040";
   const mainContent = products.length === 0
     ? `
       <div class="empty-slide">
@@ -371,7 +372,7 @@ function createProductsSlide(slide) {
     `;
 
   return `
-    <section class="board">
+    <section class="board" style="--slide-accent:${escapeHtml(slideAccent)}">
       <div class="board-backdrop"></div>
       <div class="board-watermark">
         <img src="/logo.png" alt="" aria-hidden="true">
@@ -387,9 +388,10 @@ function createProductsSlide(slide) {
 
 function createVideoSlide(slide, playerId) {
   const slideText = getSlideText(state.slideIndex + 1, state.slides.length);
+  const slideAccent = slide.accentColor || "#d64040";
 
   return `
-    <section class="board">
+    <section class="board" style="--slide-accent:${escapeHtml(slideAccent)}">
       <div class="board-backdrop"></div>
       <div class="board-watermark">
         <img src="/logo.png" alt="" aria-hidden="true">
@@ -416,7 +418,7 @@ function createVideoSlide(slide, playerId) {
 
 function renderEmptyState(message, leavingPlayer = state.currentPlayer) {
   const markup = `
-    <section class="board">
+    <section class="board" style="--slide-accent:#d64040">
       <div class="board-backdrop"></div>
       <div class="board-watermark">
         <img src="/logo.png" alt="" aria-hidden="true">

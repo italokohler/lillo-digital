@@ -59,10 +59,16 @@ body {
 }
 
 .board.is-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  filter: blur(0);
   animation: boardIn 760ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 .board.is-leaving {
+  opacity: 0;
+  transform: translateX(-14%) scale(0.975);
+  filter: blur(4px);
   animation: boardOut 520ms ease both;
   pointer-events: none;
 }
@@ -412,6 +418,18 @@ body {
   .empty-slide,
   .video-stage {
     animation: none;
+  }
+
+  .board.is-active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+
+  .board.is-leaving {
+    opacity: 0;
+    transform: translateX(-14%) scale(0.975);
+    filter: blur(4px);
   }
 
   .board.is-active,

@@ -351,18 +351,43 @@ function extractYouTubeVideoId(input) {
   return null;
 }
 
+async function fetchCatalogData() {
+  const sources = ['/api/catalog', '/data/catalog.seed.json'];
+  let lastError = null;
+
+  for (const source of sources) {
+    try {
+      const response = await fetch(source, { cache: 'no-store' });
+      if (!response.ok) {
+        lastError = new Error(`Falha ao carregar catálogo (${response.status})`);
+        continue;
+      }
+
+      return {
+        raw: await response.json(),
+        source,
+      };
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error('Falha ao carregar catálogo.');
+}
+
 async function loadCatalog() {
   setStatus('Carregando...', 'neutral');
 
-  const response = await fetch('/api/catalog', { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`Falha ao carregar catálogo (${response.status})`);
-  }
-
-  catalog = normalizeCatalog(await response.json());
+  const { raw, source } = await fetchCatalogData();
+  catalog = normalizeCatalog(raw);
   renderCatalog();
-  setStatus('Pronto', 'success');
-  setUpdated(`Atualizado agora: ${new Date().toLocaleTimeString('pt-BR')}`);
+  if (source === '/api/catalog') {
+    setStatus('Pronto', 'success');
+    setUpdated(`Atualizado agora: ${new Date().toLocaleTimeString('pt-BR')}`);
+  } else {
+    setStatus('Modo local', 'warning');
+    setUpdated('Catálogo seed local carregado. Conecte a API para salvar na nuvem.');
+  }
 }
 
 function buildSavePayload() {

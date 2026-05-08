@@ -50,24 +50,24 @@ body {
   transform: none;
   filter: none;
   transition:
-    opacity 260ms ease-out,
-    transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity 320ms ease-out,
+    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
   will-change: opacity, transform;
 }
 
 .board.is-entering {
   opacity: 0;
-  transform: translateY(8px) scale(0.996);
+  transform: translateX(10px);
 }
 
 .board.is-active {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateX(0);
 }
 
 .board.is-leaving {
   opacity: 0;
-  transform: translateY(-6px) scale(0.995);
+  transform: translateX(-8px);
   pointer-events: none;
 }
 

@@ -9,12 +9,14 @@ const state = {
   slideTimer: null,
   pollTimer: null,
   renderToken: 0,
+  currentBoard: null,
   currentPlayer: null,
   currentSlideId: null,
 };
 
 const POLL_INTERVAL_MS = 3000;
 const FALLBACK_ADVANCE_MS = 12000;
+const BOARD_SWAP_MS = 720;
 const YOUTUBE_ORIGIN = window.location.origin;
 
 function toText(value, fallback = "") {
@@ -48,6 +50,18 @@ function createId(prefix = "page") {
   }
 
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function createBoardElement(markup) {
+  const template = document.createElement("template");
+  template.innerHTML = markup.trim();
+  const board = template.content.firstElementChild;
+
+  if (!(board instanceof HTMLElement)) {
+    throw new Error("Nao foi possivel montar o slide.");
+  }
+
+  return board;
 }
 
 function normalizeProduct(product = {}) {
@@ -217,8 +231,31 @@ function advanceSlide() {
   renderSlide();
 }
 
-function updateOverlay(title, subtitle, buttonLabel) {
-  const overlay = document.querySelector("[data-video-overlay]");
+function getActiveBoard() {
+  if (state.currentBoard && state.currentBoard.isConnected) {
+    return state.currentBoard;
+  }
+
+  return root.querySelector(".board");
+}
+
+function destroyPlayer(player) {
+  if (player && typeof player.destroy === "function") {
+    try {
+      player.destroy();
+    } catch (error) {
+      // Ignore cleanup errors from stale players.
+    }
+  }
+}
+
+function clearPlayer() {
+  destroyPlayer(state.currentPlayer);
+  state.currentPlayer = null;
+}
+
+function updateOverlay(title, subtitle, buttonLabel, board = getActiveBoard()) {
+  const overlay = board?.querySelector("[data-video-overlay]");
   if (!overlay) {
     return;
   }
@@ -235,8 +272,8 @@ function updateOverlay(title, subtitle, buttonLabel) {
   overlay.hidden = false;
 }
 
-function hideOverlay() {
-  const overlay = document.querySelector("[data-video-overlay]");
+function hideOverlay(board = getActiveBoard()) {
+  const overlay = board?.querySelector("[data-video-overlay]");
   if (overlay) {
     overlay.hidden = true;
   }
@@ -331,9 +368,8 @@ function createProductsSlide(slide) {
   `;
 }
 
-function createVideoSlide(slide) {
+function createVideoSlide(slide, playerId) {
   const slideText = getSlideText(state.slideIndex + 1, state.slides.length);
-  const videoId = extractYouTubeVideoId(slide.videoUrl);
 
   return `
     <section class="board">
@@ -346,7 +382,7 @@ function createVideoSlide(slide) {
       <section class="board-main">
         <div class="video-stage">
           <div class="video-frame">
-            <div id="youtube-player"></div>
+            <div id="${escapeHtml(playerId)}"></div>
             <div class="video-overlay" data-video-overlay hidden>
               <div>
                 <h2 data-video-title>Video do YouTube</h2>
@@ -361,8 +397,8 @@ function createVideoSlide(slide) {
   `;
 }
 
-function renderEmptyState(message) {
-  root.innerHTML = `
+function renderEmptyState(message, leavingPlayer = state.currentPlayer) {
+  const markup = `
     <section class="board">
       <div class="board-backdrop"></div>
       <div class="board-watermark">
@@ -391,6 +427,7 @@ function renderEmptyState(message) {
       </section>
     </section>
   `;
+  swapBoard(createBoardElement(markup), leavingPlayer);
 }
 
 function destroyVideoPlayer() {
@@ -428,10 +465,39 @@ function loadYouTubeApi() {
   return window.__lilloYouTubePromise;
 }
 
-async function mountVideoPlayer(slide, renderToken) {
+function swapBoard(nextBoard, leavingPlayer = state.currentPlayer) {
+  const previousBoard = getActiveBoard();
+
+  nextBoard.classList.add("is-entering");
+  nextBoard.setAttribute("aria-hidden", "false");
+  root.appendChild(nextBoard);
+  state.currentBoard = nextBoard;
+  state.currentPlayer = null;
+
+  requestAnimationFrame(() => {
+    nextBoard.classList.add("is-active");
+  });
+
+  if (previousBoard && previousBoard !== nextBoard) {
+    previousBoard.classList.add("is-leaving");
+    previousBoard.setAttribute("aria-hidden", "true");
+
+    window.setTimeout(() => {
+      if (previousBoard.isConnected) {
+        previousBoard.remove();
+      }
+      destroyPlayer(leavingPlayer);
+    }, BOARD_SWAP_MS);
+    return;
+  }
+
+  destroyPlayer(leavingPlayer);
+}
+
+async function mountVideoPlayer(slide, renderToken, board, playerId) {
   const videoId = extractYouTubeVideoId(slide.videoUrl);
   if (!videoId) {
-    updateOverlay("Video nao configurado", "Cole uma URL do YouTube no painel para este slide.", null);
+    updateOverlay("Video nao configurado", "Cole uma URL do YouTube no painel para este slide.", null, board);
     scheduleAdvance(FALLBACK_ADVANCE_MS);
     return;
   }
@@ -443,7 +509,7 @@ async function mountVideoPlayer(slide, renderToken) {
       return;
     }
 
-    updateOverlay("Erro ao carregar o player", error?.message || "Nao foi possivel iniciar o video.", null);
+    updateOverlay("Erro ao carregar o player", error?.message || "Nao foi possivel iniciar o video.", null, board);
     scheduleAdvance(2200);
     return;
   }
@@ -452,13 +518,13 @@ async function mountVideoPlayer(slide, renderToken) {
     return;
   }
 
-  const container = document.getElementById("youtube-player");
+  const container = board?.querySelector(`#${playerId}`);
   if (!container) {
     return;
   }
 
   try {
-    state.currentPlayer = new window.YT.Player("youtube-player", {
+    state.currentPlayer = new window.YT.Player(playerId, {
       videoId,
       width: "100%",
       height: "100%",
@@ -486,7 +552,7 @@ async function mountVideoPlayer(slide, renderToken) {
             event.target.setVolume(100);
             event.target.playVideo();
           } catch (error) {
-            updateOverlay("Nao foi possivel iniciar o som", "O navegador bloqueou o autoplay com audio.", null);
+            updateOverlay("Nao foi possivel iniciar o som", "O navegador bloqueou o autoplay com audio.", null, board);
             scheduleAdvance(2200);
           }
         },
@@ -496,7 +562,7 @@ async function mountVideoPlayer(slide, renderToken) {
           }
 
           if (event.data === window.YT.PlayerState.ENDED) {
-            hideOverlay();
+            hideOverlay(board);
             advanceSlide();
           }
         },
@@ -505,7 +571,7 @@ async function mountVideoPlayer(slide, renderToken) {
             return;
           }
 
-          updateOverlay("Video bloqueado pelo YouTube", "Esse video nao pode tocar embutido. O site vai seguir para o proximo slide.", null);
+          updateOverlay("Video bloqueado pelo YouTube", "Esse video nao pode tocar embutido. O site vai seguir para o proximo slide.", null, board);
           scheduleAdvance(2200);
         },
         onAutoplayBlocked: () => {
@@ -513,23 +579,24 @@ async function mountVideoPlayer(slide, renderToken) {
             return;
           }
 
-          updateOverlay("Autoplay bloqueado", "O navegador bloqueou a reproducao automatica. O site vai seguir adiante.", null);
+          updateOverlay("Autoplay bloqueado", "O navegador bloqueou a reproducao automatica. O site vai seguir adiante.", null, board);
           scheduleAdvance(2200);
         },
       },
     });
   } catch (error) {
-    updateOverlay("Falha ao carregar video", error?.message || "Nao foi possivel abrir o player.", null);
+    updateOverlay("Falha ao carregar video", error?.message || "Nao foi possivel abrir o player.", null, board);
     scheduleAdvance(2200);
   }
 }
 
 function renderSlide() {
   stopSlideTimer();
-  destroyVideoPlayer();
+  const leavingPlayer = state.currentPlayer;
+  state.currentPlayer = null;
 
   if (!state.slides.length) {
-    renderEmptyState("Nenhuma pagina cadastrada");
+    renderEmptyState("Nenhuma pagina cadastrada", leavingPlayer);
     return;
   }
 
@@ -538,19 +605,22 @@ function renderSlide() {
   state.currentSlideId = slide.id;
   state.renderToken += 1;
   const renderToken = state.renderToken;
+  const playerId = createId("youtube-player");
+  const boardMarkup = slide.type === "video" ? createVideoSlide(slide, playerId) : createProductsSlide(slide);
+  const nextBoard = createBoardElement(boardMarkup);
 
-  root.innerHTML = slide.type === "video" ? createVideoSlide(slide) : createProductsSlide(slide);
+  swapBoard(nextBoard, leavingPlayer);
 
   if (slide.type === "video") {
-    const playerId = extractYouTubeVideoId(slide.videoUrl);
-    if (!playerId) {
-      updateOverlay("Video do YouTube nao configurado", "Cole uma URL do YouTube para este slide tocar ate o fim.", null);
+    const videoId = extractYouTubeVideoId(slide.videoUrl);
+    if (!videoId) {
+      updateOverlay("Video do YouTube nao configurado", "Cole uma URL do YouTube para este slide tocar ate o fim.", null, nextBoard);
       scheduleAdvance(FALLBACK_ADVANCE_MS);
       return;
     }
 
-    hideOverlay();
-    mountVideoPlayer(slide, renderToken);
+    hideOverlay(nextBoard);
+    mountVideoPlayer(slide, renderToken, nextBoard, playerId);
     return;
   }
 
